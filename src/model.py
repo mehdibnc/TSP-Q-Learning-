@@ -1,8 +1,7 @@
 from numba import njit 
 import numpy as np 
 import sys 
-
-# from utils import compute_greedy_route, route_distance
+from utils import compute_greedy_route, route_distance
 
 
 def eps_greedy_update(Q_table: np.ndarray,

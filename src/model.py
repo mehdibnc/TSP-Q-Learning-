@@ -1,6 +1,7 @@
 from numba import njit 
 import numpy as np 
 import sys 
+print('oooooo')
 from utils import compute_greedy_route, route_distance
 
 

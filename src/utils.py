@@ -6,6 +6,30 @@ import matplotlib.pyplot as plt
 from numba import njit 
 import numpy as np
 
+
+
+def load_data():
+    """ Loads TSP instances
+    
+        Returns:
+            data: dict, contains distance matrix and optimal value of tour.
+    
+    """
+    dist_matrix_15 = np.loadtxt("../data/tsp_15_291.txt") #15 cities and min cost = 291
+    dist_matrix_26 = np.loadtxt("../data/tsp_26_937.txt")
+    dist_matrix_17 = np.loadtxt("../data/tsp_17_2085.txt")
+    dist_matrix_42 = np.loadtxt("../data/tsp_42_699.txt")
+    dist_matrix_48 = np.loadtxt("../data/tsp_48_33523.txt")
+
+    data = {15:(dist_matrix_15, 291),
+            17:(dist_matrix_17, 2085),
+            26:(dist_matrix_26, 937),
+            42:(dist_matrix_42, 699),
+            48:(dist_matrix_48, 33523)}
+    return data 
+
+
+
 @njit
 def route_distance(route: np.ndarray, distances: np.ndarray):
     """ Computes the distance of a route.
@@ -22,8 +46,6 @@ def route_distance(route: np.ndarray, distances: np.ndarray):
         c += distances[route[i-1], route[i]]
     return c
 
-def jlj():
-    pass 
 
 def compute_greedy_route(Q_table: np.ndarray):
     """ Computes greedy route based on Q values """
@@ -52,4 +74,7 @@ def trace_progress(values: list, true_best: float):
             matplotlib figure        
     """
     pass
+
+
+
 

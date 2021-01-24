@@ -1,5 +1,7 @@
 from numba import njit 
 import numpy as np 
+import sys 
+
 # from utils import compute_greedy_route, route_distance
 
 
@@ -34,8 +36,10 @@ def QLearning(Q_table: np.ndarray,
     route = np.zeros((N,))
     for ep in range(epochs):
         epsilon = epsilon * (1-lbda)
+        greedy_route = compute_greedy_route(Q_table)
+        greedy_cost = route_distance(greedy_route, distances)
         if (ep+1)%100 == 0:
-            print(f"Episode {ep}. Epsilon {epsilon}. Current greedy cost {0}.")
+            print(f"Episode {ep}. Epsilon {epsilon}. Current greedy cost {greedy_cost}.")
         mask[0] = False
         for i in range(1, N):
             # Iteration i : choosing ith city to visit, knowing the past

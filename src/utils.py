@@ -22,12 +22,11 @@ def load_data():
     dist_matrix_42 = np.loadtxt("data/tsp_42_699.txt")
     dist_matrix_48 = np.loadtxt("data/tsp_48_33523.txt")
 
-    data = {15:(dist_matrix_15, 291),
+    return {15:(dist_matrix_15, 291),
             17:(dist_matrix_17, 2085),
             26:(dist_matrix_26, 937),
             42:(dist_matrix_42, 699),
-            48:(dist_matrix_48, 33523)}
-    return data 
+            48:(dist_matrix_48, 33523)} 
 
 
 
@@ -42,9 +41,10 @@ def route_distance(route: np.ndarray, distances: np.ndarray):
         Returns:
             c: float, total distance travelled in route.
     """
-    c = 0
-    for i in range(1, len(route)):
-        c += distances[int(route[i-1]), int(route[i])]
+    c = sum(
+        distances[int(route[i - 1]), int(route[i])]
+        for i in range(1, len(route))
+    )
     c += distances[int(route[-1]), int(route[0])]
     return c
 
@@ -75,7 +75,14 @@ def custom_argmax(Q_table: np.ndarray, row: int, mask: np.ndarray):
 
 
 def compute_greedy_route(Q_table: np.ndarray):
-    """ Computes greedy route based on Q values """
+    """ Computes greedy route based on Q values
+
+    Args:
+        Q_table (np.ndarray): Q table.
+
+    Returns:
+        np.ndarray: Route obtained greedily following the Q table values.
+    """
     N = Q_table.shape[0]
     mask = np.array([True]*N)
     route = np.zeros((N,))
@@ -93,9 +100,11 @@ def compute_greedy_route(Q_table: np.ndarray):
 def trace_progress(values: list, true_best: float, tag: str):
     """ Trace progress. 
         Figure is save in ../figures/
+
         Args:
-            values: list of tour lenghts over qlearning iterations
-            true_best: true optimal value for corresponding instance
+            values (list) : list of tour lenghts over qlearning iterations
+            true_best (float) : true optimal value for corresponding instance
+            tag (str) : tag to put in filename
 
         Returns:
             None       

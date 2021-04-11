@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "tsp_q_learning"
+version = "0.1.0"
+description = "\"Solving TSP through Q Learning\""
+authors = ["mehdi <mehdi-bs@live.fr>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "3.7.1"
+numpy = "1.19.5"
+prettytable = "2.0.0"
+matplotlib = "3.3.3"
+numba = "^0.53.1"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

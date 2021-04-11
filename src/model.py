@@ -11,7 +11,21 @@ def eps_greedy_update(Q_table: np.ndarray,
                       gamma: float, 
                       lr: float, 
                       lbda: float):
-    """ """
+    """ Updates Q table using epsilon greedy.
+
+    Args:
+        Q_table (np.ndarray): Input Q table.
+        distances (np.ndarray): Distance matrix describing the TSP instance.
+        mask (np.ndarray): Boolean mask giving which cities to ignore (already visited).
+        route (np.ndarray): Route container.
+        epsilon (float): exploration parameter for epsilon greedy.
+        gamma (float): weight for future reward.
+        lr (float): learning rate for q updates.
+        lbda (float): decay factor for epsilon.
+
+    Returns:
+        np.ndarray: Updated Q table.
+    """
     mask[0] = False
     N = Q_table.shape[0]
     for i in range(1, N):
@@ -48,22 +62,29 @@ def QLearning(Q_table: np.ndarray,
               lbda: float, 
               epochs: int = 100,
               verbose: bool = False):
-    """ Q Learning 
-    
-        Args:
+    """ Performs simple Q learning algorithm, epsilon greedy, to learn
+        a solution to the TSP.
 
+    Args:
+        Q_table (np.ndarray): Initial Q table.
+        distances (np.ndarray): Distance matrix describing the TSP instance.
+        epsilon (float): exploration parameter for epsilon greedy.
+        gamma (float): weight for future reward.
+        lr (float): learning rate for q updates.
+        lbda (float): decay factor for epsilon.
+        epochs (int, optional): Number of iterations. Defaults to 100.
+        verbose (bool, optional): Whether to print progress. Defaults to False.
 
-        Returns:
-
-    
-    
+    Returns:
+        np.ndarray: Q table obtained after training..
+        list: contains greedy distances for each epoch.
     """
     N = Q_table.shape[0]
     mask = np.array([True]*N)
     route = np.zeros((N,))
     cache_distance = []
     for ep in range(epochs):
-        epsilon = epsilon * (1-lbda)
+        epsilon *= 1-lbda
         greedy_route = compute_greedy_route(Q_table)
         greedy_cost = route_distance(greedy_route, distances)
         cache_distance.append(greedy_cost)

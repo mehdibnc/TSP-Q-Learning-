@@ -4,6 +4,7 @@
 ###
 import matplotlib.pyplot as plt
 import numpy as np
+from numba import njit
 from prettytable import PrettyTable
 
 
@@ -30,7 +31,9 @@ def load_data():
     }
 
 
+@njit
 def route_distance(route: np.ndarray, distances: np.ndarray):
+    # sourcery skip: sum-comprehension
     """Computes the distance of a route.
 
     Args:
@@ -40,11 +43,14 @@ def route_distance(route: np.ndarray, distances: np.ndarray):
     Returns:
         c: float, total distance travelled in route.
     """
-    c = sum(distances[int(route[i - 1]), int(route[i])] for i in range(1, len(route)))
+    c = 0
+    for i in range(1, len(route)):
+        c += distances[int(route[i - 1]), int(route[i])]
     c += distances[int(route[-1]), int(route[0])]
     return c
 
 
+@njit
 def custom_argmax(Q_table: np.ndarray, row: int, mask: np.ndarray):
     """Compute argmax over one row of Q table on unmasked colunms.
 
@@ -67,9 +73,10 @@ def custom_argmax(Q_table: np.ndarray, row: int, mask: np.ndarray):
         if Q_table[row, i] > max_v:
             argmax = i
             max_v = Q_table[row, i]
-    return argmax
+    return argmax, max_v
 
 
+@njit
 def compute_greedy_route(Q_table: np.ndarray):
     """Computes greedy route based on Q values
 
@@ -86,11 +93,17 @@ def compute_greedy_route(Q_table: np.ndarray):
     for i in range(1, N):
         # Iteration i : choosing ith city to visit, knowing the past
         current = route[i - 1]
-        next_visit = custom_argmax(Q_table, int(current), mask)
+        next_visit, _ = custom_argmax(Q_table, int(current), mask)
         # update mask and route
         mask[next_visit] = False
         route[i] = next_visit
     return route
+
+
+@njit
+def compute_value_of_q_table(Q_table: np.ndarray, distances: np.ndarray):
+    greedy_route = compute_greedy_route(Q_table)
+    return route_distance(greedy_route, distances)
 
 
 def trace_progress(values: list, true_best: float, tag: str):
@@ -117,7 +130,7 @@ def write_overall_results(res: dict, data: dict, tag: str):
     """Saves prettytable to summarize results
 
     Args:
-        res: contains
+        res: container solution value
         data: problem data, key is number of cities, value tuple (distances, best tour value)
         tag: tag name to add to file name
 

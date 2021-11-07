@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from src import utils
+from src.utils import custom_argmax, route_distance
 
 
 @pytest.fixture
@@ -30,7 +30,7 @@ def test_distance(fix_route, fix_distance):
         fix_route : fixture, example route
         fix_distance : fixture, example distance matrix
     """
-    assert utils.route_distance(fix_route, fix_distance) == 8
+    assert route_distance(fix_route, fix_distance) == 8
 
 
 def test_custom_argmax(fix_mask, fix_Q):
@@ -40,6 +40,6 @@ def test_custom_argmax(fix_mask, fix_Q):
         fix_mask : fixture, mask used in the argmax operator.
         fix_Q ([type]): fixture, example Q table.
     """
-    assert utils.custom_argmax(fix_Q, 0, fix_mask) == 1
-    assert utils.custom_argmax(fix_Q, 1, fix_mask) in [0, 2]
-    assert utils.custom_argmax(fix_Q, 2, fix_mask) == 1
+    assert custom_argmax(fix_Q, 0, fix_mask) == 1
+    assert custom_argmax(fix_Q, 1, fix_mask) in [0, 2]
+    assert custom_argmax(fix_Q, 2, fix_mask) == 1

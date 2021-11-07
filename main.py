@@ -6,8 +6,8 @@ from src.utils import (compute_greedy_route, load_data, route_distance,
                        trace_progress, write_overall_results)
 
 EPOCHS = 4000
-LEARNING_RATE = 0.3
-GAMMA = 0.9
+LEARNING_RATE = 0.2
+GAMMA = 0.95
 EPSILON = 0.1
 
 

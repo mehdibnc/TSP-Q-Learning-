@@ -1,35 +1,55 @@
-from src import utils, model
-import numpy as np 
+import time
+
+import numpy as np
+from src.model import QLearning
+from src.utils import (compute_greedy_route, load_data, route_distance,
+                       trace_progress, write_overall_results)
+
+EPOCHS = 4000
+LEARNING_RATE = 0.2
+GAMMA = 0.95
+EPSILON = 0.1
+
 
 def main():
-    """ Q Learning method is ran on each benchmark instance.
-        Figures monitoring progress are saved in figures/
+    """Q Learning method is ran on each benchmark instance.
+    Figures monitoring progress are saved in figures/
     """
-    #Loading test instances
-    data = utils.load_data()
-
-    #Running QLearning on each instance
+    # Loading test instances
+    data = load_data()
+    start = time.time()
+    # Running QLearning on each instance
     res = dict()
     for c in data:
         Q_table = np.zeros((c, c))
-        Q_table, cache_distance = model.QLearning(Q_table,
-                                                data[c][0],
-                                                epsilon=1,
-                                                gamma=0.9,
-                                                lr=0.2,
-                                                lbda=0.001,
-                                                epochs=4000)
+        Q_table, cache_distance_best, cache_distance_comp = QLearning(
+            Q_table,
+            data[c][0],
+            epsilon=EPSILON,
+            gamma=GAMMA,
+            lr=LEARNING_RATE,
+            epochs=EPOCHS,
+        )
 
         # Saving evaluation figure
-        utils.trace_progress(cache_distance, data[c][1], f'{c} Cities, Best distance {data[c][1]}')
-
+        trace_progress(
+            cache_distance_comp,
+            data[c][1],
+            f"{c}_Cities_Best_distance_{data[c][1]}_Agent_exploration",
+        )
+        trace_progress(
+            cache_distance_best,
+            data[c][1],
+            f"{c}_Cities_Best_distance_{data[c][1]}_Best_solution_found",
+        )
         # Final result for this instance
-        greedy_route = utils.compute_greedy_route(Q_table)
-        greedy_cost = utils.route_distance(greedy_route, data[c][0])
+        greedy_route = compute_greedy_route(Q_table)
+        greedy_cost = route_distance(greedy_route, data[c][0])
         res[c] = greedy_cost
-
+    print(f"Time to run : {round(time.time() - start, 3)}")
     # Overall final results
-    utils.write_overall_results(res, data, '_no_hp_tuning')
+    write_overall_results(res, data, "_no_hp_tuning")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

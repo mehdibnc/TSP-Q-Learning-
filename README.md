@@ -24,7 +24,7 @@ This is a first model to attempt to solve TSP using Q Learning, the model could 
 
 For an instance with 48 cities, the next figures shows the evolution of the cost of a greedy route as the Q table is updated.
 
-![alt text](https://github.com/mehdibnc/TSP-Q-Learning-/blob/master/figures/Distance_evolution_48%20Cities%2C%20Best%20distance%2033523.png) 
+![alt text](https://github.com/mehdibnc/TSP-Q-Learning-/blob/master/figures/Distance_evolution_48_Cities_Best_distance_33523_Agent_exploration.png) 
 
 
 Figures suggest several areas of improvements, for example the epsilon decay could be adaptive since we see that tour length sometimes reaches optimal value to increase again because of exploration. 

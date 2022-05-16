@@ -7,7 +7,7 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "3.7.1"
-numpy = "1.19.5"
+numpy = "1.21.0"
 prettytable = "2.0.0"
 matplotlib = "3.3.3"
 numba = "^0.53.1"
